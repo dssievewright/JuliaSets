@@ -98,6 +98,32 @@ iterboundnsecond <- function(z, iterations = 25, epsilon = 0.1, bound = 100000){
 }
 
 
+## Altering previous function so it is not so reliant on -.4 + .6i
+
+iterboundnthird <- function(z, iterations = 25, epsilon = 0.1, bound = 100000){
+        oldz <- z
+        n <- 1
+        seqit <- z
+        for(i in 1:iterations){
+                newz <- thefunction(oldz)
+                if(Mod(newz) > bound){
+                        return(iterations + 100)
+                        break
+                }
+                else if(sum(Mod(newz - seqit) < epsilon) > 0){
+                        return(n)
+                        break
+                }
+                else{
+                        seqit <- c(seqit, newz)
+                        oldz <- newz
+                        n <- n + 1
+                }
+        }
+        return(n)
+}
+
+
 
 ## initialize matrix
 ## viewscreen is the window we will plot, vector is of form c( min RE, max RE, min IM, max IM)
