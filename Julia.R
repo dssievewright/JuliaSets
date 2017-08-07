@@ -133,6 +133,7 @@ initmatrix <- function(resolution = 0.01, viewscreen = c(-2, 2, -2, 2)){
 
 
 
-png('filename.png')  ##  or jpeg("filename.jpeg")
-image(m)
-dev.off()
+## png('filename.png')  
+## or jpeg("filename.jpeg")
+## image(m, ...)
+## dev.off()
