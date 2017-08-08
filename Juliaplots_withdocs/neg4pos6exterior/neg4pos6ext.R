@@ -1,3 +1,10 @@
+## Make sure you have Julia.R in working directory 
+## otherwise, the following will download it for you.
+if(!file.exists("Julia.R")){
+        download.file("https://raw.githubusercontent.com/dssievewright/JuliaSets/master/Julia.R",
+                      "Julia.R")}
+source("Julia.R")
+
 ##  Let's leave the interior of the set one color and color the outside instead
 
 iterunbounded <- function(z, iterations = 25, epsilon = 0.1, bound = 100000){

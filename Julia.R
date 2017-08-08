@@ -13,7 +13,7 @@ iterating <- function(z, iterations = 25){
         return(z)
 }
 
-## Uses above function to return whether or not value Belinda to Julia set
+## Uses above function to return whether or not value belong to Julia set
 
 in.Julia2 <- function(z, iter2 = 25, bound = 1000000){
                 z <- iterating(z, iterations = iter2)
@@ -45,7 +45,7 @@ iteratingbound <- function(z, iterations = 25, bound = 100000){
 
 ## function to return number of iterations it takes for convergence.
 ## returns a numeric value equal to number of iterations needed to "converge".
-## if values are "unbounded", returns a value much larger than iterations.
+## if values are "unbounded", returns number of iterations plus 100.
 
 iterboundn <- function(z, iterations = 25, epsilon = 0.001, bound = 100000){
         oldz <- z
@@ -53,7 +53,7 @@ iterboundn <- function(z, iterations = 25, epsilon = 0.001, bound = 100000){
         for(i in 1:iterations){
                 newz <- thefunction(oldz)
                 if(Mod(newz) > bound){
-                        return(iterations + 10)
+                        return(iterations + 100)
                         break
                 }
                 else if(Mod(newz - oldz) < epsilon){
@@ -157,9 +157,106 @@ initmatrix <- function(resolution = 0.01, viewscreen = c(-2, 2, -2, 2)){
 
 
 
+## Following function to use on exterior of Julia Set.
+## If z is not in set, returns the number of iterations it takes to exceed bound.
+## If point is in set, returns iterations plus 100
+
+iterunbounded <- function(z, iterations = 25, epsilon = 0.1, bound = 100000){
+        oldz <- z
+        n <- 1
+        seqit <- z
+        for(i in 1:iterations){
+                newz <- thefunction(oldz)
+                if(Mod(newz) > bound){
+                        return(n)
+                        break
+                }
+                else if(sum(Mod(newz - seqit) < epsilon) > 0){
+                        return(iterations + 100)
+                        break
+                }
+                else{
+                        seqit <- c(seqit, newz)
+                        oldz <- newz
+                        n <- n + 1
+                }
+        }
+        return(iterations + 100)
+}
 
 
-## png('filename.png')  
-## or jpeg("filename.jpeg")
-## image(m, ...)
+## The following functions are hopefully a quicker way to initialize matrix.
+
+xseq <- function(resolution = 0.01, xview = c(-2, 2)){
+        seq(xview[1], xview[2], by=resolution)
+}
+xvals <- xseq()
+
+yseq <- function(resolution = 0.01, yview = c(-2, 2)){
+        seq(yview[1], yview[2], by=resolution)
+}
+yvals <- yseq(resolution = 0.01)
+
+
+m2 <- matrix(1:(length(xvals)*length(yvals)), nrow = length(xvals), ncol = length(yvals))
+## Turn it into complex matrix before parallelizing
+m2[1,1] <- complex(real = 1)
+
+## Function we will use to fill matrix with initial values.  
+## I set it up this way so we can parallel program
+
+fill <- function(p){
+        xco <-  Re(p) %% length(xvals)
+        if(xco != 0){
+                yco <- (Re(p)-xco)/length(xvals) + 1
+                return(complex(real = xvals[xco], imaginary = yvals[yco]))
+        }
+        else{
+                yco <- Re(p)/length(xvals)
+                return(complex(real = xvals[length(xvals)], imaginary = yvals[yco]))
+                
+        }
+}
+
+
+## Thr following code is commented out but will be modified in the individual 
+## plots to fill matrix and determine the output values
+
+## library(parallel)
+## no_cores <- detectCores() - 1
+## clust <- makeCluster(no_cores, type = "FORK")
+
+## m2 <- parApply(clust, m2, 1:2, fill)
+## m2 <- parApply(clust, m2, 1:2, iterunbounded, iterations = 100, 
+##               bound = 1000, epsilon = 0.01)
+
+## stopCluster(clust)
+
+## png('filename.png', width = length(xvals) + 90, height = length(yvals) + 120)  
+## or jpeg("filename.jpeg", ...) or bmp(...)
+## image(Re(m2), col = cols, axes = FALSE, useRaster = TRUE)
 ## dev.off()
+
+
+
+## Writing our another approach because complex matrix takes up more memory.
+## Hopefully keeping everything numeric might free up more space 
+
+## Still need to start off with our matrix:
+m2 <- matrix(1:(length(xvals)*length(yvals)), nrow = length(xvals), ncol = length(yvals))
+## Then apply fill and iterunbounded (or whichever function you want to use).
+filliterunb <- function(p, ...){
+        a <- fill(p)
+        return(iterunbounded(a, ...))
+}
+
+filliterbound <- function(p, ...){
+        a <- fill(p)
+        return(iterboundnthird(a, ...))
+}
+
+## Now go parallel with this function:
+## m2 <- parApply(clust, m2, 1:2, filliterunb, iterations = 100, 
+##               bound = 1000, epsilon = 0.01)
+
+
