@@ -6,7 +6,7 @@ Some notes on notation:
 
 1. z will be used to represent a complex value. In much of this code, if you apply a function to a numeric or integer, it will be coerced into a complex value in the process.
 2. f(z) is the function we will use for the Julia set.
-3. f~2~(z) will be shorthand for f(f(z)) and inductively f~n~(z) = f(f~n-1~(z)).
+3. f<sub>2</sub>(z) will be shorthand for f(f(z)) and inductively f<sub>n</sub>(z) = f(f<sub>n-1</sub>(z)).
 
 ## About Julia Sets
 
