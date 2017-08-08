@@ -1,4 +1,4 @@
-# Function Docunmentation
+# Function Documentation
 
 This file will list out the functions and give a description of them.  This can be used as a refernce file so that you don't have to lumber through Julia.R if you have any questions about whcich function you want to use.
 
@@ -6,7 +6,7 @@ Some notes on notation:
 
 1. z will be used to represent a complex value. In much of this code, if you apply a function to a numeric or integer, it will be coerced into a complex value in the process.
 2. f(z) is the function we will use for the Julia set.
-3. f-2-(z) will be shorthand for f(f(z)) and inductively f-n-(z) = f(f-n\*-\*1-(z)).
+3. f~2~(z) will be shorthand for f(f(z)) and inductively f~n~(z) = f(f~n-1~(z)).
 
 ## About Julia Sets
 
