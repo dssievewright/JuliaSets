@@ -10,7 +10,7 @@ Some notes on notation:
 
 ## About Julia Sets
 
-For many of our examples, we'll look be using the function f(z) = z^2 - 0.4 + 0.6i.  In reality, we can take f to be any rational function (quotient of two polynomials).  As we apply f over and over again, i.e., create a sequence {f-n-(z)}, either the values will remain bounded or will tend towards infinity, \( |f_n(z)| \rightarrow \infinity \).
+For many of our examples, we'll look be using the function f(z) = z^2 - 0.4 + 0.6i.  In reality, we can take f to be any rational function (quotient of two polynomials).  As we apply f over and over again, i.e., create a sequence {f-n-(z)}, either the values will remain bounded or will tend towards infinity, \\( |f_n(z)| \rightarrow \infinity \\).
 
 
 We'll use the notation J-f- to refer to the Julia set associated with f.
